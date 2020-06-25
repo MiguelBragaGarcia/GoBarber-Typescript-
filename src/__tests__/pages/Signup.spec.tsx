@@ -42,7 +42,9 @@ describe('SignUp page', () => {
     const buttonElement = getByText('Cadastrar');
 
     fireEvent.change(nameField, { target: { value: 'John Doe' } });
-    fireEvent.change(emailField, { target: { value: 'johndoe@example.com' } });
+    fireEvent.change(emailField, {
+      target: { value: 'johndoe@example.com.br' },
+    });
     fireEvent.change(passwordField, { target: { value: '123456' } });
 
     fireEvent.click(buttonElement);
@@ -50,7 +52,7 @@ describe('SignUp page', () => {
     apiMock.onPost('users').reply(200, {
       id: 1,
       name: 'Jonh Doe',
-      email: 'johndoe@example.com',
+      email: 'johndoe@example.com.br',
       avatar: null,
     });
 
@@ -78,9 +80,15 @@ describe('SignUp page', () => {
 
     fireEvent.click(buttonElement);
 
-    // TODO
-    // Ideia que estou trabalhando como solução é usar a mudança de cor como indicativo de sucesso.
-    // expect(nameField).toHaveStyle('border-color: #c53030');
+    // Resolvido ao não chamar o código de push??
+    // Faz sentido não chamar o push já que essa página a mudança é visual e em outro componente e a única coisa que pode passar no teste é isso
+    // Como estamos testando as páginas individualmente não faz sentido importar os componentes
+    // Estamos testando se não mudou de página e (não chamou toast tambḿe)??
+
+    // Será que dá para fazer com test-ids nesses elementos de input paar verificar a cor?
+    await wait(() => {
+      expect(mockedHistoryPush).not.toBeCalledWith('/');
+    });
   });
 
   it('should not be able to signup (Server/Client Error)', async () => {
@@ -92,7 +100,9 @@ describe('SignUp page', () => {
     const buttonElement = getByText('Cadastrar');
 
     fireEvent.change(nameField, { target: { value: 'John Doe' } });
-    fireEvent.change(emailField, { target: { value: 'johndoe@example.com' } });
+    fireEvent.change(emailField, {
+      target: { value: 'johndoe@example.com.br' },
+    });
     fireEvent.change(passwordField, { target: { value: '123456' } });
 
     fireEvent.click(buttonElement);
@@ -100,7 +110,7 @@ describe('SignUp page', () => {
     apiMock.onPost('users').reply(500, {
       id: 1,
       name: 'Jonh Doe',
-      email: 'johndoe@example.com',
+      email: 'johndoe@example.com.br',
       avatar: null,
     });
 
